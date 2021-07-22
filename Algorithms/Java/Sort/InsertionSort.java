@@ -1,16 +1,13 @@
-package sort;
-
 import java.util.Random;
+import java.util.Scanner;
+
+import utils.Utilities;
 
 public class InsertionSort {
-
-    private int[] unorderedList;
     
-    public InsertionSort(int[] unorderedList) {
-        this.unorderedList = unorderedList;
-    }
+    public InsertionSort() {;}
 
-    public int[] sort() {
+    public int[] sort(int[] unorderedList) {
         // Go through the list comparing it with the most previous number
         for (int i = 1; i < unorderedList.length; i++) {
             // If this number is less that the most previous number, it has not yet been sorted.
@@ -33,29 +30,9 @@ public class InsertionSort {
         return unorderedList;
     }
 
-    public void showList() {
-        for (int i = 0; i < unorderedList.length; i++) {
-            System.out.print(unorderedList[i]);
-            if (i == unorderedList.length-1) {
-                System.out.println("\n");
-            } else {
-                System.out.print(", ");
-            }
-        }
-    }
-
-    public boolean isSorted() {
-        for (int i = 1; i < unorderedList.length; i++) {
-            if (unorderedList[i] < unorderedList[i-1]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public long calculatedSort() {
+    public long calculatedSort(int[] unorderedList) {
         long start = System.currentTimeMillis();
-        sort();
+        sort(unorderedList);
         long end = System.currentTimeMillis();
         long total = end-start;
         System.out.println("List length: " + unorderedList.length + "\nTime: " + total + "ms");
@@ -63,11 +40,48 @@ public class InsertionSort {
     }
 
     public static void main(String[] args) {
-        int size = 1024;
-        int[] unorderedList = new Random(System.currentTimeMillis()).ints(size).toArray();
-        InsertionSort sortedList = new InsertionSort(unorderedList);
-        sortedList.calculatedSort();
-        System.out.println(sortedList.isSorted());
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter list length: ");
+        int size = 1024 * 64;
+        try {
+            size = Integer.parseInt(scanner.nextLine());
+            if (size < 0) {
+                size = 0;
+            }
+        } catch (NumberFormatException e) {;}
+        
+        System.out.print("Enter minimum number: ");
+        int minNumber = Integer.MIN_VALUE;
+        try {
+            minNumber = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {;}
+
+        System.out.print("Enter maximum number: ");
+        int maxNumber = Integer.MAX_VALUE;
+        try {
+            maxNumber = Integer.parseInt(scanner.nextLine());
+            if (maxNumber <= minNumber) {
+                maxNumber = minNumber + 1;
+            }
+        } catch (NumberFormatException e) {;}
+
+        int[] unorderedList = new Random(System.currentTimeMillis()).ints(size, minNumber, maxNumber).toArray();
+        System.out.print("Print the list (default = N) [Y/N]: ");
+        boolean isShown = false;
+        if (scanner.nextLine().toLowerCase().equals("y")) {
+            isShown = true;
+        }
+        InsertionSort algorithm = new InsertionSort();
+        System.out.println("Unsorted List: " + Utilities.isSorted(unorderedList));
+        if (isShown) {
+            Utilities.showList(unorderedList);
+        }
+        algorithm.calculatedSort(unorderedList);
+        System.out.println("Sorted List: " + Utilities.isSorted(unorderedList));
+        if (isShown) {
+            Utilities.showList(unorderedList);
+        }
     }
 
 }

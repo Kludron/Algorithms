@@ -1,6 +1,6 @@
-package Sort;
+package utils;
 
-public static class Utilities {
+public class Utilities {
 
     public static void showList(int[] list) {
         for (int i = 0; i < list.length; i++) {
@@ -21,5 +21,4 @@ public static class Utilities {
         }
         return true;
     }
-
 }
